@@ -1,51 +1,65 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulário de Gastos</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Tracker</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
+
 <body>
-  <h1>Formulário de Gastos</h1>
-  
-  <form id="formulario">
-    <label for="valor">Valor do Gasto (R$):</label>
-    <input type="number" id="valor" name="valor" step="0.01" min="0" placeholder="Ex: 150.00" required>
-    <br><br>
+    <div class="card-wrapper">
+        <div class="header">
+            <h1 id="titulo-mes">Janeiro</h1>
 
-    <label for="tipo">Tipo do Gasto:</label>
-    <select id="tipo" name="tipo" required>
-      <option value="energia">Energia</option>
-      <option value="agua">Água</option>
-      <option value="aluguel">Aluguel</option>
-      <option value="escola">Escola</option>
-      <option value="supermercado">Supermercado</option>
-    </select>
-    <br><br>
+            <div>
+                <label for="mes-dropdown">Mês do Gasto:</label>
+                <select id="mes-dropdown" name="mes" required>
+                    <option value="janeiro" selected>Janeiro</option>
+                    <option value="fevereiro">Fevereiro</option>
+                    <option value="marco">Março</option>
+                    <option value="abril">Abril</option>
+                    <option value="maio">Maio</option>
+                    <option value="junho">Junho</option>
+                    <option value="julho">Julho</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="setembro">Setembro</option>
+                    <option value="outubro">Outubro</option>
+                    <option value="novembro">Novembro</option>
+                    <option value="dezembro">Dezembro</option>
+                </select>
+            </div>
+        </div>
 
-    <label for="mes">Mês do Gasto:</label>
-    <select id="mes" name="mes" required>
-      <option value="janeiro">Janeiro</option>
-      <option value="fevereiro">Fevereiro</option>
-      <option value="marco">Março</option>
-      <option value="abril">Abril</option>
-      <option value="maio">Maio</option>
-      <option value="junho">Junho</option>
-      <option value="julho">Julho</option>
-      <option value="agosto">Agosto</option>
-      <option value="setembro">Setembro</option>
-      <option value="outubro">Outubro</option>
-      <option value="novembro">Novembro</option>
-      <option value="dezembro">Dezembro</option>
-    </select>
-    <br><br>
+        <form id="formulario-gastos">
+            <div>
+                <label for="valor-gasto">Valor do Gasto (R$):</label>
+                <input type="number" id="valor-gasto" name="valor" step="0.01" min="0" placeholder="Ex: 150.00"
+                    required>
+            </div>
 
-    <label for="remover">Remover gasto</label>
-    <input id="remover" type="checkbox">
+            <div>
+                <label for="categoria-gasto">Tipo do Gasto:</label>
+                <select id="categoria-gasto" name="categoria" required>
+                    <option value="energia">Energia</option>
+                    <option value="agua">Água</option>
+                    <option value="aluguel">Aluguel</option>
+                    <option value="escola">Escola</option>
+                    <option value="supermercado">Supermercado</option>
+                </select>
+            </div>
 
-    <button type="submit">Adicionar Gasto</button>
-  </form>
+            <button type="submit">Adicionar Gasto</button>
+        </form>
 
-  <script src="./script.js"></script>
+        <div id="estatisticas-gastos"></div>
+
+    </div>
+
+    <script src="./js/script.js"></script>
 </body>
+
 </html>

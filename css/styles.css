@@ -1,0 +1,42 @@
+body {
+    width: 100vw;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#titulo-mes {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.card-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 768px;
+    margin: 80px auto;
+    padding: 32px;
+    border: 1px solid grey;
+
+}
+
+#formulario {
+    display: flex;
+    justify-content: space-between;
+}
+
+#estatisticas-gastos {
+    display: flex;
+    gap: 64px;
+    flex-wrap: wrap;
+}
+
+#estatisticas-gastos>div {
+    padding: 16px;
+    border: 1px solid grey;
+}
