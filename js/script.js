@@ -1,3 +1,11 @@
+const totaisNoAno = { 
+  energia: 0,
+  agua: 0,
+  aluguel: 0,
+  escola: 0,
+  supermercado: 0
+}; 
+
 const gastos = [
   {
     mes: "janeiro",
@@ -49,12 +57,37 @@ const gastos = [
   },
 ];
 
+let orcamentoTotal = 8500; 
+let orcamentoRestante = orcamentoTotal; 
+
 const mesDropdown = document.querySelector("#mes-dropdown");
 const tituloMes = document.querySelector("#titulo-mes");
 const estatisticasGastos = document.querySelector("#estatisticas-gastos");
 const formularioGastos = document.querySelector("#formulario-gastos");
+const orcamentoRestanteElement = document.querySelector('#orcamento-restante'); 
+const estatisticaAno = document.querySelector('#estatisticas-ano'); 
 
-const orcamento = 8500;
+function atualizarTotaisAnuais(categoria, valor) {
+  totaisNoAno[categoria] += valor;
+}
+
+function exibirTotaisNoAno() { 
+  estatisticaAno.innerHTML = '';
+
+  for (let categoria in totaisNoAno) {
+      const div = document.createElement('div');
+      div.innerHTML = `
+      <h3>${categoria.charAt(0).toUpperCase() + categoria.slice(1)}</h3>
+      <p> Total do Ano: R$${totaisNoAno[categoria].toFixed(2)}</p>
+  `;
+  }
+  estatisticaAno.appendChild(div);
+}
+function atualizarOrcamentoRestante(valor) {
+ orcamentoRestante -= valor;
+  orcamentoRestanteElement.innerText = orcamentoRestante.toFixed(2);
+ }
+
 
 function getRemoveId(categoria, mes) {
   return `remove-${categoria}-${mes}`;
@@ -88,8 +121,13 @@ function criaCardGasto(mesEncontrado, categoriaGasto, valor) {
 }
 
 function removeGasto(mesEncontrado, categoriaGasto, cardGasto) {
+  const valor = mesEncontrado.categorias[categoriaGasto];
   mesEncontrado.categorias[categoriaGasto] = 0;
   estatisticasGastos.removeChild(cardGasto);
+  orcamentoRestante += valor;
+  orcamentoRestanteElement.innerText = orcamentoRestante.toFixed(2);
+  totaisNoAno[categoriaGasto] -= valor;
+  exibirTotaisNoAno();
 }
 
 function atualizaGasto(mesEncontrado, categoriaGasto, valor) {
@@ -114,18 +152,28 @@ formularioGastos.addEventListener("submit", (e) => {
   if (mesEncontrado.categorias[categoriaGasto] === 0) {
     mesEncontrado.categorias[categoriaGasto] = valorGasto;
     criaCardGasto(mesEncontrado, categoriaGasto, valorGasto);
-  } else {
-    mesEncontrado.categorias[categoriaGasto] = valorGasto;
-    atualizaGasto(mesEncontrado, categoriaGasto, valorGasto);
-  }
+
+    atualizarOrcamentoRestante(valorGasto); //adicionei
+
+    atualizarTotaisAnuais(categoriaGasto, valorGasto); //adicionei
+
+    exibirTotaisNoAno(); //adicionei
+
+} else {
+    alert ('Já existe um gasto para essa categoria nesse mês. Atualize o valor se necessário')
+}
+
+document.querySelector('#valor-gasto').value = "";
+})
 
   inputGasto = "";
-});
 
 mesDropdown.addEventListener("change", (e) => {
   const mesEncontrado = gastos.find((item) => item.mes === mesDropdown.value);
   tituloMes.innerText = mesDropdown.options[mesDropdown.selectedIndex].text;
   estatisticasGastos.innerHTML = "";
+
+  let totalGasto = 0;
 
   for (let categoria in mesEncontrado.categorias) {
     if (mesEncontrado.categorias[categoria] !== 0) {
@@ -133,9 +181,11 @@ mesDropdown.addEventListener("change", (e) => {
         mesEncontrado,
         categoria,
         mesEncontrado.categorias[categoria]
-      );
-    }
+        totalGasto += mesEncontrado.categorias[categoria];
+      }
   }
+  orcamentoRestante = orcamentoTotal - totalGasto; //adicionei
+  orcamentoRestanteElement.innerText = orcamentoRestante.toFixed(2); //adicionei 
 });
 
 function listarGastoDetalhado() {
