@@ -1,24 +1,30 @@
+*,
 body {
-  width: 100vw;
-  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+body {
   background-color: #eff6ff;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
 .top-cards {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
   margin: 80px auto 40px;
 
   max-width: 768px;
 }
 
-.top-cards__content {
+.top-cards__content,
+.card-gasto {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -28,13 +34,44 @@ body {
   border-radius: 7px;
 }
 
-.top-cards__title {
+.card-total-ano {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  padding: 10px 0px;
+  border-bottom: 1px solid grey;
+}
+
+.card-total-ano__title {
+  color: #516778;
+  font-size: 22px;
+}
+
+.top-cards__title,
+.card-gasto__title {
   color: #516778;
   font-size: 14px;
 }
-.top-cards__value {
-  font-size: 32px;
+
+.top-cards__value,
+.card-gasto__value,
+.card-total-ano__value {
+  font-size: 28px;
   font-weight: 550;
+}
+
+.card-gasto__remove {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  padding: 0px;
+  border: none;
+  background: none;
+  color: #ef4444;
+}
+
+.card-gasto__remove:hover {
+  cursor: pointer;
 }
 
 #titulo-mes {
@@ -54,18 +91,14 @@ body {
   background-color: #ffffff;
 }
 
-#formulario {
+#formulario-gastos {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 8px;
 }
 
 #estatisticas-gastos {
-  display: flex;
-  gap: 64px;
-  flex-wrap: wrap;
-}
-
-#estatisticas-gastos > div {
-  padding: 16px;
-  border: 1px solid grey;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }

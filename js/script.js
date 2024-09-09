@@ -1,112 +1,44 @@
-const totaisNoAno = {
-  energia: 0,
-  agua: 0,
-  aluguel: 0,
-  escola: 0,
-  supermercado: 0,
-};
-
-const gastos = [
-  {
-    mes: "janeiro",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "fevereiro",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "marco",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "abril",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "maio",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "junho",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "julho",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "agosto",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "setembro",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "outubro",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "novembro",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-  {
-    mes: "dezembro",
-    categorias: { energia: 0, agua: 0, aluguel: 0, escola: 0, supermercado: 0 },
-  },
-];
-
-let orcamentoTotal = 8500;
-let orcamentoRestante = orcamentoTotal;
+import { totaisNoAno, gastos } from "./db.js";
+import { formatMoney, getRemoveId, getUpdateId } from "./utils.js";
 
 const mesDropdown = document.querySelector("#mes-dropdown");
 const tituloMes = document.querySelector("#titulo-mes");
 const estatisticasGastos = document.querySelector("#estatisticas-gastos");
 const formularioGastos = document.querySelector("#formulario-gastos");
-const orcamentoRestanteElement = document.querySelector("#orcamento-restante");
+const orcamento = document.querySelector("#orcamento");
 const estatisticaAno = document.querySelector("#estatisticas-ano");
+const gastoMensal = document.querySelector("#gasto-mensal");
+const gastoAnual = document.querySelector("#gasto-anual");
 
 function atualizarTotaisAnuais(categoria, valor) {
   totaisNoAno[categoria] += valor;
 }
 
 function exibirTotaisNoAno() {
-  estatisticaAno.innerHTML = "<h2>Total Anual</h2>";
-
-  let somaTotalAnual = 0;
+  estatisticaAno.innerHTML = "";
 
   for (let categoria in totaisNoAno) {
-    const cardAno = document.createElement("div");
-    cardAno.classList.add("card-total-ano");
-    cardAno.innerHTML = `
-      <h3>${categoria.charAt(0).toUpperCase() + categoria.slice(1)}</h3>
-      <p> Total do Ano: R$${totaisNoAno[categoria].toFixed(2)}</p>
-  `;
-    estatisticaAno.appendChild(cardAno);
+    if (totaisNoAno[categoria] !== 0) {
+      const cardAno = document.createElement("div");
+      cardAno.classList.add("card-total-ano");
+      cardAno.innerHTML = `
+        <h3 class="card-total-ano__title">${
+          categoria.charAt(0).toUpperCase() + categoria.slice(1)
+        }</h3>
+        <p class="card-total-ano__value">${formatMoney(
+          totaisNoAno[categoria]
+        )}</p>
+      `;
 
-    somaTotalAnual += totaisNoAno[categoria];
+      estatisticaAno.appendChild(cardAno);
+    }
   }
-  const totalGeralCard = document.createElement("div");
-  totalGeralCard.classList.add("card-total-ano");
-  totalGeralCard.innerHTML = `
-    <h3>Total Geral Anual</h3>
-    <p> R$ ${somaTotalAnual.toFixed(2)}</p>
-  `;
-  estatisticaAno.appendChild(totalGeralCard);
 }
 
-function atualizarOrcamentoRestante(valor) {
-  orcamentoRestante -= valor;
-  orcamentoRestanteElement.innerText = orcamentoRestante.toFixed(2);
-}
-
-function getRemoveId(categoria, mes) {
-  return `remove-${categoria}-${mes}`;
-}
-
-function getUpdateId(categoria, mes) {
-  return `update-${categoria}-${mes}`;
+function atualizaOrcamento(mesEncontrado, valor) {
+  const orcamentoRestante = mesEncontrado.orcamento - valor;
+  mesEncontrado.orcamento -= valor;
+  orcamento.innerText = formatMoney(orcamentoRestante);
 }
 
 function criaCardGasto(mesEncontrado, categoriaGasto, valor) {
@@ -118,17 +50,17 @@ function criaCardGasto(mesEncontrado, categoriaGasto, valor) {
   const updateId = getUpdateId(categoriaGasto, mes);
 
   const cardGasto = document.createElement("div");
+  cardGasto.classList.add("card-gasto");
   cardGasto.innerHTML = `
-    <h3>${categoriaLabel}</h3>
-    <p>R$<span id="${updateId}">${valor.toFixed(2)}</span></p>
-    <button id="${removeId}">X</button>
+    <h3 class="card-gasto__title">${categoriaLabel}</h3>
+    <p id="${updateId}" class="card-gasto__value">${formatMoney(valor)}</p>
+    <button id="${removeId}" class="card-gasto__remove"><i class="fa-solid fa-trash"></i></button>
     `;
 
   estatisticasGastos.appendChild(cardGasto);
 
   document.getElementById(removeId).addEventListener("click", () => {
     removeGasto(mesEncontrado, categoriaGasto, cardGasto);
-    console.log(gastos);
   });
 }
 
@@ -137,21 +69,14 @@ function removeGasto(mesEncontrado, categoriaGasto, cardGasto) {
   mesEncontrado.categorias[categoriaGasto] = 0;
   estatisticasGastos.removeChild(cardGasto);
 
-  orcamentoRestante += valor;
-  orcamentoRestanteElement.innerText = orcamentoRestante.toFixed(2);
+  const orcamentoRestante = (mesEncontrado.orcamento += valor);
+  orcamento.innerText = formatMoney(orcamentoRestante);
 
   totaisNoAno[categoriaGasto] -= valor;
+
+  gastoMensal.innerHTML = gastoMensalTotal();
+  gastoAnual.innerHTML = gastoAnualTotal();
   exibirTotaisNoAno();
-}
-
-function atualizaGasto(mesEncontrado, categoriaGasto, valor) {
-  alert("Você está atualizando um gasto");
-  const updateId = getUpdateId(categoriaGasto, mesEncontrado.mes);
-  const valorGasto = document.getElementById(updateId);
-  console.log(valorGasto);
-
-  mesEncontrado.categorias[categoriaGasto] = valor;
-  valorGasto.innerText = valor.toFixed(2);
 }
 
 formularioGastos.addEventListener("submit", (e) => {
@@ -159,33 +84,29 @@ formularioGastos.addEventListener("submit", (e) => {
   let inputGasto = document.querySelector("#valor-gasto").value;
   const valorGasto = parseFloat(inputGasto);
   const categoriaGasto = document.querySelector("#categoria-gasto").value;
-  const gastoMensal = document.querySelector("#gasto-mensal");
-  const gastoAnual = document.querySelector("#gasto-anual");
+
   const mesEncontrado = gastos.find((item) => item.mes === mesDropdown.value);
 
   if (mesEncontrado.categorias[categoriaGasto] === 0) {
     mesEncontrado.categorias[categoriaGasto] = valorGasto;
     criaCardGasto(mesEncontrado, categoriaGasto, valorGasto);
 
-    atualizarOrcamentoRestante(valorGasto);
+    atualizaOrcamento(mesEncontrado, valorGasto);
     atualizarTotaisAnuais(categoriaGasto, valorGasto);
     exibirTotaisNoAno();
   } else {
-    alert(
-      "Já existe um gasto para essa categoria nesse mês. Atualize o valor se necessário"
-    );
-
-    document.querySelector("#valor-gasto").value = "";
+    alert(`O valor de ${categoriaGasto} já está definido!`);
   }
+
   gastoMensal.innerHTML = gastoMensalTotal();
   gastoAnual.innerHTML = gastoAnualTotal();
+  inputGasto = "";
 });
-
-inputGasto = "";
 
 mesDropdown.addEventListener("change", (e) => {
   const mesEncontrado = gastos.find((item) => item.mes === mesDropdown.value);
   tituloMes.innerText = mesDropdown.options[mesDropdown.selectedIndex].text;
+  orcamento.innerText = formatMoney(mesEncontrado.orcamento);
   estatisticasGastos.innerHTML = "";
 
   let totalGasto = 0;
@@ -201,8 +122,10 @@ mesDropdown.addEventListener("change", (e) => {
     }
   }
 
-  orcamentoRestante = orcamentoTotal - totalGasto;
-  orcamentoRestanteElement.innerText = orcamentoRestante.toFixed(2);
+  orcamento.innerText = formatMoney(mesEncontrado.orcamento);
+
+  gastoMensal.innerHTML = gastoMensalTotal();
+  gastoAnual.innerHTML = gastoAnualTotal();
 });
 
 function listarGastoDetalhado() {
@@ -230,10 +153,7 @@ function gastoMensalTotal() {
   for (let key in mesEncontrado.categorias) {
     valorMensal += mesEncontrado.categorias[key];
   }
-  return valorMensal.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
+  return formatMoney(valorMensal);
 }
 
 function gastoAnualTotal() {
@@ -242,8 +162,5 @@ function gastoAnualTotal() {
   for (let categoria in totaisNoAno) {
     somaTotalAnual += totaisNoAno[categoria];
   }
-  return somaTotalAnual.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
+  return formatMoney(somaTotalAnual);
 }
