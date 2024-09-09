@@ -1,42 +1,71 @@
 body {
-    width: 100vw;
-    min-height: 100vh;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #eff6ff;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-cards {
+  display: flex;
+  justify-content: space-between;
+  margin: 80px auto 40px;
+
+  max-width: 768px;
+}
+
+.top-cards__content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #ffffff;
+  border: 1px solid grey;
+  padding: 10px 20px;
+  border-radius: 7px;
+}
+
+.top-cards__title {
+  color: #516778;
+  font-size: 14px;
+}
+.top-cards__value {
+  font-size: 32px;
+  font-weight: 550;
 }
 
 #titulo-mes {
-    font-size: 36px;
-    font-weight: bold;
+  font-size: 36px;
+  font-weight: bold;
 }
 
 .card-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    max-width: 768px;
-    margin: 80px auto;
-    padding: 32px;
-    border: 1px solid grey;
-
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 768px;
+  margin: 40px auto;
+  padding: 32px;
+  border: 1px solid grey;
+  border-radius: 7px;
+  background-color: #ffffff;
 }
 
 #formulario {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 #estatisticas-gastos {
-    display: flex;
-    gap: 64px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 64px;
+  flex-wrap: wrap;
 }
 
-#estatisticas-gastos>div {
-    padding: 16px;
-    border: 1px solid grey;
+#estatisticas-gastos > div {
+  padding: 16px;
+  border: 1px solid grey;
 }
